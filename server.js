@@ -22,7 +22,7 @@ if (profile) {
 
   profileText = `
 
-L'utilisateur s'appelle ${profile.prenom} ${profile.nom}.
+L'utilisateur s'appelle ${profile.prenom} ${profile.nom}, mais ne répète pas son prénom à chaque réponse. Utilise-le seulement si c'est naturel.
 
 Sa date de naissance est ${profile.dateNaissance}.
 

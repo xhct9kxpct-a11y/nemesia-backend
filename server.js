@@ -16,11 +16,11 @@ const openai = new OpenAI({
 app.post("/chat", async (req, res) => {
   const { messages, profile, memory } = req.body;
 
-let profileText = '';
+  let profileText = '';
 
-if (profile) {
+  if (profile) {
 
-  profileText = `
+    profileText = `
 
 L'utilisateur s'appelle ${profile.prenom} ${profile.nom}, mais ne répète pas son prénom à chaque réponse. Utilise-le seulement si c'est naturel.
 
@@ -30,12 +30,12 @@ Utilise ces informations naturellement dans tes réponses.
 
 `;
 
-}
+  }
 
-let memoryText = '';
+  let memoryText = '';
 
-if (memory && memory.length > 0) {
-  memoryText = `
+  if (memory && memory.length > 0) {
+    memoryText = `
 Mémoire utilisateur fiable :
 ${memory.join("\n")}
 
@@ -43,7 +43,19 @@ Si une information est présente dans cette mémoire, considère-la comme connue
 Ne dis pas que tu ne sais pas ou que tu n’as pas de mémoire si la réponse se trouve dans cette mémoire.
 Utilise cette mémoire naturellement pour répondre.
 `;
-}
+  }
+
+  const now = new Date();
+
+  const currentDateTime = now.toLocaleString("fr-FR", {
+    timeZone: "Europe/Paris",
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   try {
     const response = await openai.chat.completions.create({
@@ -82,6 +94,8 @@ Style :
 
 Objectif :
 Être une présence utile, proche et fiable au quotidien : discuter, aider, réfléchir, conseiller, organiser, motiver, rigoler quand c’est le moment.
+
+Date actuelle : ${currentDateTime}
 
 ${profileText}
 ${memoryText}

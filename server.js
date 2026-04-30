@@ -14,7 +14,7 @@ const openai = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  const { messages, profile, memory } = req.body;
+  const { messages, profile, memory, location } = req.body;
 
   let profileText = '';
 
@@ -56,6 +56,10 @@ Utilise cette mémoire naturellement pour répondre.
     hour: "2-digit",
     minute: "2-digit",
   });
+
+  const locationText = location
+  ? `L'utilisateur est actuellement à ${location.name || ""} ${location.street || ""}, ${location.postalCode || ""} ${location.city || ""}, ${location.country || ""}.`
+  : "Position de l'utilisateur inconnue.";
 
   try {
     const response = await openai.chat.completions.create({
@@ -99,6 +103,7 @@ Date actuelle : ${currentDateTime}
 
 ${profileText}
 ${memoryText}
+${locationText}
 `
         },
         ...messages.filter(

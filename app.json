@@ -4,6 +4,9 @@
       "eas": {
         "projectId": "2fed5578-71d7-4fd1-87cb-8143ce3caecc"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.neghino.backend"
     }
   }
 }

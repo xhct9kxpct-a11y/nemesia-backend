@@ -189,6 +189,8 @@ cron.schedule('0 10 * * *', async () => {
     'Némésia ☪️',
     'Rappelle-toi qu’Allah voit tous tes efforts.'
   );
+  }, {
+  timezone: 'Europe/Paris'
 });
 
 // 16H - SPORT
@@ -197,6 +199,8 @@ cron.schedule('0 16 * * *', async () => {
     'Némésia 🏋️',
     'Ton futur corps dépend de ce que tu fais aujourd’hui.'
   );
+  }, {
+  timezone: 'Europe/Paris'
 });
 
 // 22H - BILAN
@@ -205,6 +209,8 @@ cron.schedule('0 22 * * *', async () => {
     'Némésia 🌙',
     'As-tu avancé aujourd’hui sur tes objectifs religieux, sportifs et commerciaux ?'
   );
+  }, {
+  timezone: 'Europe/Paris'
 });
 
 app.listen(3000, () => {

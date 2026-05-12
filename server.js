@@ -164,7 +164,7 @@ app.post('/test-notification', async (req, res) => {
   res.json({ success: true });
 });
 
-const cron = require('node-cron');
+const cron = 'node-cron';
 
 async function sendNotification(title, body) {
   if (!savedToken) return;

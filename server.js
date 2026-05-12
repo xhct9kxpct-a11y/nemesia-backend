@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import cron from 'node-cron';
 
 dotenv.config();
 
@@ -163,8 +164,6 @@ app.post('/test-notification', async (req, res) => {
 
   res.json({ success: true });
 });
-
-const cron = 'node-cron';
 
 async function sendNotification(title, body) {
   if (!savedToken) return;

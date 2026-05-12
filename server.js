@@ -164,6 +164,50 @@ app.post('/test-notification', async (req, res) => {
   res.json({ success: true });
 });
 
+const cron = require('node-cron');
+
+async function sendNotification(title, body) {
+  if (!savedToken) return;
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      to: savedToken,
+      sound: 'default',
+      title,
+      body,
+    }),
+  });
+}
+
+// 10H - ALLAH
+cron.schedule('0 10 * * *', async () => {
+  await sendNotification(
+    'Némésia ☪️',
+    'Rappelle-toi qu’Allah voit tous tes efforts.'
+  );
+});
+
+// 16H - SPORT
+cron.schedule('0 16 * * *', async () => {
+  await sendNotification(
+    'Némésia 🏋️',
+    'Ton futur corps dépend de ce que tu fais aujourd’hui.'
+  );
+});
+
+// 22H - BILAN
+cron.schedule('0 22 * * *', async () => {
+  await sendNotification(
+    'Némésia 🌙',
+    'As-tu avancé aujourd’hui sur tes objectifs religieux, sportifs et commerciaux ?'
+  );
+});
+
 app.listen(3000, () => {
   console.log("Serveur lancé sur http://localhost:3000");
 });

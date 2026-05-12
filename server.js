@@ -165,6 +165,31 @@ app.post('/test-notification', async (req, res) => {
   res.json({ success: true });
 });
 
+async function generateNotificationMessage(type) {
+  const prompts = {
+    spiritual: "Écris une courte notification en français pour rappeler Allah, la foi, la discipline et l’effort. Maximum 18 mots.",
+    sport: "Écris une courte notification en français pour motiver à faire du sport maintenant. Maximum 18 mots.",
+    bilan: "Écris une courte notification en français pour demander un bilan de journée religieux, sportif et commercial. Maximum 22 mots."
+  };
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      {
+
+        role: "system",
+        content: "Tu écris uniquement le texte de notification."
+      },
+      {
+        role: "user",
+        content: prompts[type]
+      }
+    ]
+  });
+
+  return response.choices[0].message.content;
+}
+
 async function sendNotification(title, body) {
   if (!savedToken) return;
 
@@ -185,31 +210,37 @@ async function sendNotification(title, body) {
 
 // 10H - ALLAH
 cron.schedule('0 10 * * *', async () => {
+  const message = await generateNotificationMessage('spiritual');
+
   await sendNotification(
     'Némésia ☪️',
-    'Rappelle-toi qu’Allah voit tous tes efforts.'
+    message
   );
-  }, {
+}, {
   timezone: 'Europe/Paris'
 });
 
 // 16H - SPORT
 cron.schedule('0 16 * * *', async () => {
+  const message = await generateNotificationMessage('sport');
+
   await sendNotification(
     'Némésia 🏋️',
-    'Ton futur corps dépend de ce que tu fais aujourd’hui.'
+    message
   );
-  }, {
+}, {
   timezone: 'Europe/Paris'
 });
 
 // 22H - BILAN
 cron.schedule('0 22 * * *', async () => {
-  await sendNotification(
+  const message = await generateNotificationMessage('bilan');
+  
+await sendNotification(
     'Némésia 🌙',
-    'As-tu avancé aujourd’hui sur tes objectifs religieux, sportifs et commerciaux ?'
+    message
   );
-  }, {
+}, {
   timezone: 'Europe/Paris'
 });
 

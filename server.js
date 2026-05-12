@@ -58,8 +58,8 @@ Utilise cette mémoire naturellement pour répondre.
   });
 
   const locationText = location
-  ? `L'utilisateur est actuellement à ${location.name || ""} ${location.street || ""}, ${location.postalCode || ""} ${location.city || ""}, ${location.country || ""}.`
-  : "Position de l'utilisateur inconnue.";
+    ? `L'utilisateur est actuellement à ${location.name || ""} ${location.street || ""}, ${location.postalCode || ""} ${location.city || ""}, ${location.country || ""}.`
+    : "Position de l'utilisateur inconnue.";
 
   try {
     const response = await openai.chat.completions.create({
@@ -101,6 +101,12 @@ Objectif :
 
 Date actuelle : ${currentDateTime}
 
+ Quand tu réponds :
+- N'utilise jamais ** pour le gras
+- Tu peux mettre du gras sur les mots importants
+- Aère ton texte avec des sauts de ligne
+- Fais des phrases naturelles, fluides, lisibles comme une app mobile
+
 ${profileText}
 ${memoryText}
 ${locationText}
@@ -121,6 +127,41 @@ ${locationText}
     console.error(error);
     res.status(500).json({ error: "Erreur serveur" });
   }
+});
+
+let savedToken = '';
+
+app.post('/save-token', (req, res) => {
+  const { token } = req.body;
+
+  savedToken = token;
+
+  console.log('TOKEN SAUVEGARDE :', token);
+
+  res.json({ success: true });
+});
+
+app.post('/test-notification', async (req, res) => {
+  if (!savedToken) {
+    return res.status(400).json({ error: 'Aucun token enregistré' });
+  }
+
+  await fetch('https://exp.host/--/api/v2/push/send', {
+
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify({
+      to: savedToken,
+      sound: 'default',
+      title: 'Némésia',
+      body: 'Notification test réussie ✅',
+    }),
+  });
+
+  res.json({ success: true });
 });
 
 app.listen(3000, () => {
